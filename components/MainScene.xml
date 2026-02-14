@@ -45,6 +45,7 @@
     </Group>
 
     <Dialog id="errorDialog" title="Error" message="" visible="false" />
+    <KeyboardDialog id="searchKeyboard" title="Search" text="" buttons="[&quot;Search&quot;,&quot;Cancel&quot;]" visible="false" />
     <Video id="videoPlayer" width="1280" height="720" visible="false"/>
 
     <SourceServiceTask id="serviceTask" />

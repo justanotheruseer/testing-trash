@@ -24,11 +24,13 @@ sub init()
   m.ratingText = m.top.findNode("ratingText")
   m.apiKeyText = m.top.findNode("apiKeyText")
   m.errorDialog = m.top.findNode("errorDialog")
+  m.searchKeyboard = m.top.findNode("searchKeyboard")
   m.videoPlayer = m.top.findNode("videoPlayer")
   m.serviceTask = m.top.findNode("serviceTask")
 
   m.serviceTask.ObserveField("results", "onTaskDone")
   m.serviceTask.ObserveField("errorText", "onTaskError")
+  m.searchKeyboard.ObserveField("buttonSelected", "onKeyboardButton")
 
   sec = CreateObject("roRegistrySection", "StreamFinder")
   m.settings = CreateObject("roAssociativeArray")
@@ -62,12 +64,35 @@ sub onTaskError()
   end if
 end sub
 
+sub onKeyboardButton()
+  if m.searchKeyboard.buttonSelected = 0
+    m.searchText = m.searchKeyboard.text
+    updateSearchText()
+    runSearch()
+  end if
+  m.searchKeyboard.close = true
+end sub
+
+sub openSearchKeyboard()
+  m.searchKeyboard.text = m.searchText
+  m.searchKeyboard.visible = true
+  m.searchKeyboard.SetFocus(true)
+end sub
+
 function onKeyEvent(key as string, press as boolean) as boolean
   if not press then return false
 
   if m.errorDialog.visible
     m.errorDialog.visible = false
     return true
+  end if
+
+  if m.searchKeyboard.visible
+    if key = "back"
+      m.searchKeyboard.close = true
+      return true
+    end if
+    return false
   end if
 
   if m.videoPlayer.visible
@@ -122,7 +147,7 @@ function handleSearchKeys(key as string) as boolean
         openDetails(m.currentResults[idx])
       end if
     else
-      runSearch()
+      openSearchKeyboard()
     end if
     return true
   else if Len(key) = 1
