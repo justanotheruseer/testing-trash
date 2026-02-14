@@ -3,7 +3,7 @@ sub Main()
     port = CreateObject("roMessagePort")
     screen.SetMessagePort(port)
 
-    scene = screen.CreateScene("MainScene")
+    screen.CreateScene("MainScene")
     screen.Show()
 
     while true

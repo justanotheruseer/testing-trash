@@ -6,8 +6,11 @@ sub init()
   m.selectedItem = invalid
   m.settingsFocusIndex = 0
   m.ratingOptions = ["TV-G", "TV-PG", "TV-14", "TV-MA", "PG", "PG-13", "R"]
+  m.searchTypes = ["movie", "series"]
+  m.searchTypeIndex = 0
 
   m.searchLabel = m.top.findNode("searchText")
+  m.searchTypeLabel = m.top.findNode("searchType")
   m.resultsGrid = m.top.findNode("resultsGrid")
   m.resultsTitle = m.top.findNode("resultsTitle")
   m.detailsPane = m.top.findNode("detailsPane")
@@ -35,8 +38,9 @@ sub init()
   }
 
   updateSettingsLabels()
-  m.searchLabel.text = "Type to search..."
-  m.resultsGrid.SetFocus(true)
+  updateSearchText()
+  updateSearchType()
+  m.top.SetFocus(true)
 end sub
 
 sub onTaskDone()
@@ -49,8 +53,6 @@ sub onTaskDone()
   else if result.streams <> invalid
     m.currentSources = result.streams
     showSources()
-  else if result.detail <> invalid
-    applyDetail(result.detail)
   end if
 end sub
 
@@ -63,6 +65,11 @@ end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
   if not press then return false
+
+  if m.errorDialog.visible
+    m.errorDialog.visible = false
+    return true
+  end if
 
   if m.videoPlayer.visible
     if key = "OK"
@@ -96,6 +103,19 @@ function handleSearchKeys(key as string) as boolean
     m.state = "settings"
     m.settingsPane.visible = true
     return true
+  else if key = "up" or key = "down"
+    m.searchTypeIndex = (m.searchTypeIndex + 1) mod m.searchTypes.Count()
+    updateSearchType()
+    return true
+  else if key = "right"
+    if m.currentResults.Count() > 0
+      m.resultsGrid.SetFocus(true)
+      return false
+    end if
+    return true
+  else if key = "left"
+    m.top.SetFocus(true)
+    return true
   else if key = "OK"
     if m.currentResults.Count() > 0 and m.resultsGrid.hasFocus()
       idx = m.resultsGrid.itemSelected
@@ -106,8 +126,6 @@ function handleSearchKeys(key as string) as boolean
       runSearch()
     end if
     return true
-  else if key = "left" or key = "right" or key = "up" or key = "down"
-    return false
   else if Len(key) = 1
     m.searchText = m.searchText + key
     updateSearchText()
@@ -120,7 +138,7 @@ function handleDetailsKeys(key as string) as boolean
   if key = "back"
     m.detailsPane.visible = false
     m.state = "search"
-    m.resultsGrid.SetFocus(true)
+    m.top.SetFocus(true)
     return true
   else if key = "OK"
     idx = m.sourcesRow.rowItemSelected[1]
@@ -137,6 +155,7 @@ function handleSettingsKeys(key as string) as boolean
     saveSettings()
     m.settingsPane.visible = false
     m.state = "search"
+    m.top.SetFocus(true)
     return true
   else if key = "OK"
     m.settingsFocusIndex = (m.settingsFocusIndex + 1) mod 3
@@ -174,7 +193,7 @@ sub runSearch()
   m.serviceTask.control = "stop"
   m.serviceTask.action = "search"
   m.serviceTask.query = m.searchText
-  m.serviceTask.mediaType = "movie"
+  m.serviceTask.mediaType = m.searchTypes[m.searchTypeIndex]
   m.serviceTask.apiKey = m.settings.apiKey
   m.serviceTask.maxRating = m.settings.maxRating
   m.serviceTask.control = "run"
@@ -187,7 +206,7 @@ sub openDetails(item as object)
   m.detailPoster.uri = item.poster
   m.detailTitle.text = item.title
   m.detailMeta.text = item.year + " • " + item.type + " • " + item.rated
-  m.detailDescription.text = item.plot
+  m.detailDescription.text = firstNonEmpty(item.plot, "No description available.")
 
   m.serviceTask.control = "stop"
   m.serviceTask.action = "sources"
@@ -207,7 +226,7 @@ sub showResults()
   m.resultsGrid.content = content
   m.resultsTitle.visible = true
   m.resultsGrid.visible = true
-  m.resultsGrid.SetFocus(true)
+  m.top.SetFocus(true)
 end sub
 
 sub showSources()
@@ -230,7 +249,7 @@ sub playSource(url as string)
   end if
 
   item = CreateObject("roSGNode", "ContentNode")
-  item.streamFormat = "hls"
+  item.streamFormat = "mp4"
   item.url = url
   m.videoPlayer.content = item
   m.videoPlayer.control = "play"
@@ -260,6 +279,10 @@ sub updateSearchText()
   end if
 end sub
 
+sub updateSearchType()
+  m.searchTypeLabel.text = m.searchTypes[m.searchTypeIndex]
+end sub
+
 sub updateSettingsLabels()
   m.addonUrlText.text = m.settings.addonUrl
   m.ratingText.text = m.settings.maxRating
@@ -283,11 +306,10 @@ sub showError(message as string)
   m.errorDialog.visible = true
 end sub
 
-sub applyDetail(detail as object)
-end sub
-
-function firstNonEmpty(value as string, fallback as string) as string
-  if value = invalid or Trim(value) = "" then return fallback
+function firstNonEmpty(value as dynamic, fallback as string) as string
+  if value = invalid then return fallback
+  if type(value) <> "roString" and type(value) <> "String" then return value
+  if Trim(value) = "" then return fallback
   return value
 end function
 

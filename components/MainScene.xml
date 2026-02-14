@@ -15,9 +15,7 @@
     </Group>
 
     <Label id="resultsTitle" translation="[50,250]" text="Results" font="font:MediumBoldSystemFont" visible="false" />
-    <MarkupGrid id="resultsGrid" translation="[50,290]" itemSize="[220,330]" itemSpacing="[20,16]" numColumns="5" numRows="1" drawFocusFeedback="true" visible="false">
-      <itemComponentName>ResultCard</itemComponentName>
-    </MarkupGrid>
+    <MarkupGrid id="resultsGrid" translation="[50,290]" itemSize="[220,330]" itemSpacing="[20,16]" numColumns="5" numRows="1" drawFocusFeedback="true" visible="false" itemComponentName="ResultCard" />
 
     <Group id="detailsPane" translation="[50,130]" visible="false">
       <Poster id="detailPoster" width="300" height="450" loadDisplayMode="scaleToFit" />
@@ -25,9 +23,7 @@
       <Label id="detailMeta" translation="[340,90]" width="850" color="0xb0b0b0ff" />
       <Label id="detailDescription" translation="[340,140]" width="850" numLines="8" />
       <Label id="sourcesLabel" translation="[340,370]" text="Sources" font="font:MediumBoldSystemFont" />
-      <RowList id="sourcesRow" translation="[340,410]" itemSize="[280,90]" itemSpacing="[20,0]" numRows="1" drawFocusFeedback="true">
-        <itemComponentName>SourceCard</itemComponentName>
-      </RowList>
+      <RowList id="sourcesRow" translation="[340,410]" itemSize="[280,90]" itemSpacing="[20,0]" numRows="1" drawFocusFeedback="true" itemComponentName="SourceCard" />
     </Group>
 
     <Group id="settingsPane" translation="[240,120]" visible="false">
