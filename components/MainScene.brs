@@ -185,7 +185,7 @@ function handleSettingsKeys(key as string) as boolean
 end function
 
 sub runSearch()
-  if Trim(m.searchText) = "" then
+  if m.searchText = "" then
     showError("Enter search text first.")
     return
   end if
@@ -307,9 +307,14 @@ end sub
 
 function firstNonEmpty(value as dynamic, fallback as string) as string
   if value = invalid then return fallback
-  if type(value) <> "roString" and type(value) <> "String" then return value
-  if Trim(value) = "" then return fallback
-  return value
+
+  if type(value) = "roString" or type(value) = "String"
+    textValue = value
+    if textValue = "" then return fallback
+    return textValue
+  end if
+
+  return fallback
 end function
 
 function indexOf(items as object, target as string) as integer
