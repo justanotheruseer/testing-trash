@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SourceCard" extends="Group">
+  <interface>
+    <field id="itemContent" type="node" onChange="updateContent" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/components/SourceCard.brs" />
+  <children>
+    <Rectangle id="bg" width="280" height="90" color="0x1f1f1fff" />
+    <Label id="title" translation="[12,10]" width="256" numLines="2" />
+    <Label id="sub" translation="[12,56]" width="256" color="0xbdbdbdff" />
+  </children>
+</component>

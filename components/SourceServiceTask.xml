@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SourceServiceTask" extends="Task">
+  <interface>
+    <field id="action" type="string" />
+    <field id="query" type="string" />
+    <field id="mediaType" type="string" value="movie" />
+    <field id="imdbId" type="string" />
+    <field id="addonUrl" type="string" />
+    <field id="apiKey" type="string" />
+    <field id="maxRating" type="string" value="TV-14" />
+    <field id="results" type="assocarray" />
+    <field id="errorText" type="string" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/components/SourceServiceTask.brs" />
+</component>

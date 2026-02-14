@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="MainScene" extends="Scene">
+  <script type="text/brightscript" uri="pkg:/components/MainScene.brs" />
+  <children>
+    <Poster id="background" width="1280" height="720" loadDisplayMode="scaleToFill" uri=""/>
+    <Label id="titleLabel" translation="[50,30]" text="Stream Finder" font="font:LargeBoldSystemFont" />
+    <Label id="hintLabel" translation="[50,75]" text="Search titles, filter by rating, and launch a stream source" />
+
+    <Group id="searchPane" translation="[50,130]">
+      <Label text="Search" font="font:MediumBoldSystemFont" />
+      <Rectangle translation="[0,35]" width="760" height="60" color="0x1f1f1fff"/>
+      <Label id="searchText" translation="[20,52]" text="" width="700"/>
+      <Label id="searchType" translation="[780,52]" text="movie" />
+      <Label id="searchHint" translation="[20,95]" text="Type text, Up/Down toggles movie/show, OK searches, * opens settings" color="0xccccccff" />
+    </Group>
+
+    <Label id="resultsTitle" translation="[50,250]" text="Results" font="font:MediumBoldSystemFont" visible="false" />
+    <MarkupGrid id="resultsGrid" translation="[50,290]" itemSize="[220,330]" itemSpacing="[20,16]" numColumns="5" numRows="1" drawFocusFeedback="true" visible="false">
+      <itemComponentName>ResultCard</itemComponentName>
+    </MarkupGrid>
+
+    <Group id="detailsPane" translation="[50,130]" visible="false">
+      <Poster id="detailPoster" width="300" height="450" loadDisplayMode="scaleToFit" />
+      <Label id="detailTitle" translation="[340,0]" width="850" numLines="2" font="font:LargeBoldSystemFont" />
+      <Label id="detailMeta" translation="[340,90]" width="850" color="0xb0b0b0ff" />
+      <Label id="detailDescription" translation="[340,140]" width="850" numLines="8" />
+      <Label id="sourcesLabel" translation="[340,370]" text="Sources" font="font:MediumBoldSystemFont" />
+      <RowList id="sourcesRow" translation="[340,410]" itemSize="[280,90]" itemSpacing="[20,0]" numRows="1" drawFocusFeedback="true">
+        <itemComponentName>SourceCard</itemComponentName>
+      </RowList>
+    </Group>
+
+    <Group id="settingsPane" translation="[240,120]" visible="false">
+      <Rectangle width="800" height="450" color="0x111111ee" />
+      <Label translation="[30,20]" text="Settings" font="font:LargeBoldSystemFont" />
+      <Label translation="[30,90]" text="Addon Base URL" />
+      <Rectangle translation="[30,120]" width="740" height="52" color="0x2a2a2aff" />
+      <Label id="addonUrlText" translation="[44,136]" width="700" />
+
+      <Label translation="[30,200]" text="Maximum Rating" />
+      <Rectangle translation="[30,230]" width="360" height="52" color="0x2a2a2aff" />
+      <Label id="ratingText" translation="[44,246]" width="300" />
+
+      <Label translation="[30,320]" text="OMDb API Key" />
+      <Rectangle translation="[30,350]" width="740" height="52" color="0x2a2a2aff" />
+      <Label id="apiKeyText" translation="[44,366]" width="700" />
+
+      <Label translation="[30,415]" text="OK cycles/edit values, Back closes settings" color="0xb0b0b0ff"/>
+    </Group>
+
+    <Dialog id="errorDialog" title="Error" message="" visible="false" />
+    <Video id="videoPlayer" width="1280" height="720" visible="false"/>
+
+    <SourceServiceTask id="serviceTask" />
+  </children>
+</component>
