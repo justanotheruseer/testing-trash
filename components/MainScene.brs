@@ -31,11 +31,10 @@ sub init()
   m.serviceTask.ObserveField("errorText", "onTaskError")
 
   sec = CreateObject("roRegistrySection", "StreamFinder")
-  m.settings = {
-    addonUrl: firstNonEmpty(sec.Read("addonUrl"), "http://localhost:7000"),
-    maxRating: firstNonEmpty(sec.Read("maxRating"), "TV-14"),
-    apiKey: firstNonEmpty(sec.Read("apiKey"), "")
-  }
+  m.settings = CreateObject("roAssociativeArray")
+  m.settings.addonUrl = firstNonEmpty(sec.Read("addonUrl"), "http://localhost:7000")
+  m.settings.maxRating = firstNonEmpty(sec.Read("maxRating"), "TV-14")
+  m.settings.apiKey = firstNonEmpty(sec.Read("apiKey"), "")
 
   updateSettingsLabels()
   updateSearchText()
