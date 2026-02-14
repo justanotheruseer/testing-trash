@@ -32,9 +32,9 @@ sub init()
 
   sec = CreateObject("roRegistrySection", "StreamFinder")
   m.settings = {
-    addonUrl: firstNonEmpty(sec.Read("addonUrl", ""), "http://localhost:7000"),
-    maxRating: firstNonEmpty(sec.Read("maxRating", ""), "TV-14"),
-    apiKey: firstNonEmpty(sec.Read("apiKey", ""), "")
+    addonUrl: firstNonEmpty(sec.Read("addonUrl"), "http://localhost:7000"),
+    maxRating: firstNonEmpty(sec.Read("maxRating"), "TV-14"),
+    apiKey: firstNonEmpty(sec.Read("apiKey"), "")
   }
 
   updateSettingsLabels()
